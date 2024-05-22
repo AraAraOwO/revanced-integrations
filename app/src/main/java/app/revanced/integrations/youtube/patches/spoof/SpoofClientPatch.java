@@ -26,6 +26,16 @@ public class SpoofClientPatch {
     private static final boolean SPOOF_CLIENT_STORYBOARD = SPOOF_CLIENT_ENABLED && !SPOOF_CLIENT_USE_IOS;
 
     /**
+     * The device machine id for the iPhone 15, used to get 60fps with the {@code iOS} client.
+     *
+     * <p>
+     * See <a href="https://gist.github.com/adamawolf/3048717">this GitHub Gist</a> for more
+     * information.
+     * </p>
+     */
+    private static final String IOS_DEVICE_MODEL = "iPhone15,4";
+
+    /**
      * Any unreachable ip address.  Used to intentionally fail requests.
      */
     private static final String UNREACHABLE_HOST_URI_STRING = "https://127.0.0.0";
@@ -145,6 +155,17 @@ public class SpoofClientPatch {
         }
 
         return originalClientVersion;
+    }
+
+    /**
+     * Injection point.
+     */
+    public static String getClientModel(String originalClientModel) {
+        if (SPOOF_CLIENT_ENABLED && getSpoofClientType() == ClientType.IOS) {
+            return IOS_DEVICE_MODEL;
+        }
+
+        return originalClientModel;
     }
 
     /**
